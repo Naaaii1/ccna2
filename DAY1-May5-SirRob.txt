@@ -246,9 +246,9 @@ ephone-dn 7
 ephone-dn 8
   number 2188
  ephone-dn 9
-   number 2199
+   number 2113
 ephone-dn 10
- number 2198
+ number 2108
 Ephone 1
   Mac-address cafe.face.baba
   type 8945
