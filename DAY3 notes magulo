@@ -1,0 +1,306 @@
+cisco = sh ip route
+win = netstat -r / route print
+linux = netstat -r
+
+
+sh ip route (ospf,eigrp,bgp)
+
+admin distance of connected routes
+by practice, there should always be a gap
+| AD Value | Trust Value               |
+| ---      | ---                       |
+| 0        | Most Trusted              |
+| 1 - 254  | Lower Value, Higher Trust |
+| 255      | Untrusted, Discarded      |
+
+
+for primary gateway
+ip route 0.0.0.0 0.0.0.0 192.168.1.30(ip network sample) 1 <- default
+ip route 0.0.0.0 0.0.0.0 192.168.1.129(sample ip net)10 <- floating
+
+ctr+shift+6 = escape traceroute
+
+!@P1
+conf t
+ ip route 192.168.1.128 255.255.255.224 10.2.1.1
+ ip route 192.168.1.130 255.255.255.255 10.2.1.2
+ end
+ping 192.168.1.129
+
+conf t
+ip route 192.168.1.128 255.255.255.224 10.2.1.2
+ip route 192.168.1.129 255.255.255.255 10.2.1.1
+
+determine connected networks
+
+10.2.1.0/24
+10.2.2.0/24
+192.168.1.128/27
+10.1.4.4/30
+
+
+!@C1
+conf t
+router eigrp 100
+network 10.2.1.0 0.0.0.255
+network 10.2.2.0 0.0.0.255
+network 192.168.1.128 0.0.0.31
+network 10.1.4.4 0.0.0.3
+end
+
+-----------------------------------------
+
+10.2.1.0/24
+10.2.2.0/24
+192.168.1.128/27
+10.1.4.8/30
+
+!@C2
+conf t
+router eigrp 100
+network 10.2.1.0 0.0.0.255
+network 10.2.2.0 0.0.0.255
+network 192.168.1.128 0.0.0.31
+network 10.1.4.8 0.0.0.3
+end
+
+
+eigrp router - 224.0.0.10 <- multicast add of eigrp
+
+
+
+
+!@R4
+conf t
+ router eigrp 100
+  no auto-summary
+  network 10.1.4.8 0.0.0.3
+  network 10.1.4.4 0.0.0.3
+  end
+
+----------------
+
+IGP - internal gateway protocol
+- Distance Vector prot
+	-EIGRP
+	-RIP
+-Link State
+	-OSPG
+	-IS-IS
+
+EGP - external gateway protocol
+-Path Vector
+-BGP
+
+
+5 types of Hello msg of EIGRP
+1. HELLO
+2. QUERY
+3. UPDATE
+4. REPLY
+5. HELLO (ACKNOWLEDGE)
+
+
+--------------------------------------------
+
+__EIGRP Path Selection:__
+
+| Device | RD  | FD  | Metric Path |
+| ---    | --- | --- | ---         |
+| C1     |     |     |             |
+| C2     |     |     |             |
+
+
+eigrp
+-bandwith
+-load
+-delay
+-reliablity
+-mtu
+-ext
+
+
+
+!@R4
+conf t
+router eigrp 100
+variance 2
+end
+
+-------------------------------------
+ospf routing
+
+!@R2
+
+conf t
+router ospf 1
+router-id 2.2.2.2
+network 2.2.2.2 0.0.0.0 area 0
+network 10.1.1.4 0.0.0.3 area 0
+network 10.1.1.0 0.0.0.3 area 12
+end
+
+-------------------------------
+ Eliminate the need for a DR/BDR election between R4 & R3
+- Configure R1 to be ineligible to become a DR/BDR
+- Configure R2 with the highest priority on its e1/2 interface.
+
+
+Point-Point
+~~~
+!@R4
+conf t
+ int e1/2
+  ip ospf network point-to-point
+  end
+
+Priority
+~~~~~~
+!@R1
+conf t
+ int e1/0
+  ip ospf priority 0
+  end
+~~~
+
+Configure Auth:
+!@
+conf t
+key chain CCNA
+key 1
+key-string pass
+crypto md5
+!
+int e1/2
+ip ospf auth key CCNA
+end
+
+-----------------------------------
+
+### OSPF & EIGRP Redistribution
+~~~
+!@R4
+config T
+ router eigrp 100
+  redistribute ospf 1
+  exit
+ router ospf 1
+  redistribute eigrp 100 subnets
+end
+
+
+--------------------------------------
+
+## Path Selection Process 
+1. Longest Prefix Match
+2. Admin Distance
+3. metric
+
+
+Type 3
+!@CoreBABA
+conf t
+int lo10
+ip add 192.168.21.21 255.255.255.255
+ip ospf 1 area 21
+end
+
+
+prevent congestion
+highest router id = DR/BDR = designated router/backup designated router
+
+
+LSDB -link state database
+
+
+Type4
+!@CoreBABA
+conf t
+router eigrp 100 
+no network 192.168.0.0 0.0.255.255
+network 192.168.21.0 0.0.0.255
+router ospf 1
+redistribute eigrp 100 subnets metric 2
+end
+
+
+
+advertise bgp w/ loopback
+
+### 🎯 Excercise: Configure BGP on I2(PLDT). Set the ASN number to 2.
+- Advertise the loopback IP
+
+~~~
+!@I2 - PLDT
+config t
+ router bgp 2
+ bgp log-neighbor-changes
+ neighbor 207.7.7.1 remote-as 1
+ neighbor 32.3.2.3  remote-as 3
+ neighbor 25.2.5.5  remote-as 45
+ neighbor 24.2.4.4  remote-as 45
+ address-family ipv4
+  neighbor  207.7.7.1  active
+  neighbor 32.3.2.3  active
+  neighbor 25.2.5.5  active
+  neighbor 24.2.4.4  active
+  network 22.22.22.22 mask 255.255.255.255
+  network 207.7.7.0 mask 255.255.255.0
+  network 32.3.2.0 mask 255.255.255.0
+  network 25.2.5.0 mask 255.255.255.0
+  network 24.2.4.0 mask 255.255.255.0
+  end
+
+configure static mapping for NAT
+!@R1
+conf t
+ ip nat inside source static 10.1.1.2 208.8.8.10 
+ ip nat inside source static 10.1.1.6 208.8.8.20
+ ip nat inside source static 10.1.1.10 208.8.8.30
+ end
+show ip nat translations
+
+
+
+
+!@C1
+conf t
+ip nat inside source static 10.1.4.6 208.8.8.100
+ip nat inside source static 10.1.4.10 207.7.7.100
+end
+sh ip nat translation
+
+
+dynamic nat
+
+### Dynamic NAT
+Create an ACL to match traffic
+~~~
+!@R1
+conf t
+ access-list 1 permit 10.0.0.0 0.255.255.255
+ access-list 1 permit 172.16.0.0 0.15.255.255
+ access-list 1 permit 192.168.0.0 0.0.255.255
+ !
+ ip nat pool NATPOOL 209.9.9.10 209.9.9.20 netmask 255.255.255.0
+ ip nat inside source list 1 pool NATPOOL
+ end
+~~~
+
+
+### PAT 1:Many
+Add an OVERLOAD Keyword
+~~~
+!@R1
+clear ip nat trans *
+conf t
+ ip nat inside source list 1 pool NATPOOL overload
+ end
+
+conf t
+ip route 0.0.0.0 0.0.0.0 192.168.1.132
+
+
+
+
+
