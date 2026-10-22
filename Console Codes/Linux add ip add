@@ -1,0 +1,14 @@
+!@BLDG PH
+sudo su
+hostname BLDG-PH
+ifconfig eth0 10.11.11.101 netmask 255.255.255.224 up
+route add default gw 10.11.11.113
+ping 10.11.11.113
+
+
+!@BLDG-JP-1
+sudo su
+hostname BLDG-JP-1
+ifconfig eth0 10.21.21.211 netmask 255.255.255.240 up
+route add default gw 10.21.21.213
+ping 10.21.21.213
