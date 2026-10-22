@@ -1,0 +1,27 @@
+Assigning to VLAN
+
+!@A1
+conf t
+int e0/0
+switchport mode access
+switchport access vlan 10
+end
+
+!@A2
+conf t
+int e1/0
+switchport mode access
+switchport access vlan 10
+
+!@C1
+conf t
+int e1/0
+switchport mode access
+switchport access vlan 100
+end
+
+!@C2
+conf t
+int e1/0
+switchport mode access
+switchport access vlan 20
