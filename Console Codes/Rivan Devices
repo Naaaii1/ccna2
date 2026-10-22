@@ -1,0 +1,12 @@
+CORETAAS
+-core switch
+configure things locally
+COREBABA
+-core switch
+configure things locally
+CUCM
+-Cisco Unified Communications Manager 
+managament platform used for taking care of ep phones for VOIP
+  also maybe cameras etc
+EDGE
+-router that connects devices,switches to external public/private WANs, the internet, or cloud services
