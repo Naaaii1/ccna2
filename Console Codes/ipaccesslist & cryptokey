@@ -1,0 +1,81 @@
+conf t
+ no ip access-list extended FWP4
+ ip access-list extended FWP4
+ permit tcp Any host www.bet100.com eq 80 log
+ permit tcp Any host www.bet100.com eq 443 log
+ permit icmp Any host www.bet100.com log
+ permit tcp Any host www.bet100.com eq 22 log
+ permit tcp Any host www.bet100.com eq 53 log
+ Int gi 1
+  ip access-group FWP4 in
+  end
+
+
+conf t
+ no ip access-list extended FWP5
+ ip access-list extended FWP5
+  permit tcp Any host www.bet100.com eq 23 log
+permit tcp Any host www.bet100.com eq 3306 log
+permit tcp Any host www.bet100.com eq 53 log
+permit tcp Any host www.bet100.com eq 21 log
+permit icmp Any host www.bet100.com log
+  exit
+ int gi 1
+  ip access-group FWP5 in
+  end
+~~~
+
+
+
+
+
+
+
+!@UTM-PH
+conf t
+ no ip access-list extended FWP6
+ ip access-list extended FWP6
+ permit tcp Any host www.bet100.com eq 2000 log
+ permit tcp Any host www.bet100.com eq 5060 log
+ permit tcp Any host www.bet100.com eq 143 log
+ permit tcp Any host www.bet100.com eq 25 log
+ permit tcp Any host www.bet100.com eq 110 log
+ permit tcp Any host www.bet100.com eq 21 log
+ permit udp Any host www.bet100.com eq 69 log
+permit udp Any host www.bet100.com eq 123 log
+ Int gi 1
+  ip access-group FWP6 in
+  end
+
+
+
+
+
+-----------Crypto Key Encryption Cisco---------------
+
+transport input (all)-> depende kay cisco if ssh, telnet etc
+
+conf t
+hostname UTM-PH-SECURE
+ip domain name ccna.key
+crypto key generate rsa modulus 2048 label key 
+!
+ip ssh version 2
+line vty 0 14
+transport input all
+login local
+username nai08 privilege 15 secret pass
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
