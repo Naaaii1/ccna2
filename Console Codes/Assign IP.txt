@@ -1,0 +1,33 @@
+Assigning IP Add
+
+!@P1
+conf t
+int e0/0
+no shut
+ip add 10.2.1.101 255.255.255.0
+end
+
+
+!@P2
+conf t
+int e1/0
+no shut
+ip add 10.2.1.102 255.255.255.0
+end
+
+
+!@S1
+conf t
+int e1/0
+no shut
+ip add 192.168.1.133 255.255.255.224
+end
+
+
+!@S2
+conf t
+int e1/0
+no shut
+ip add 10.2.2.133 255.255.255.0
+end
+
