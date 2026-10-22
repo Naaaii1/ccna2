@@ -1,0 +1,71 @@
+
+establish nat for connecting to net
+
+conf t
+int g1
+ip nat outside
+int g3
+ip nat inside
+access-list 1 permit any
+ip nat inside source list 1 int g1 overload
+ip route 0.0.0.0 0.0.0.0 208.8.8.2
+ip name-server 8.8.8.8
+ip domain lookup
+end
+
+161.49.21.243
+66.254.114.41
+66.254.114.238
+66.254.114.234
+172.66.158.179
+104.21.55.88
+104.21.34.102
+208.77.20.35
+
+
+configure standard acl named NOPORN to protect brain
+
+!@UTM-PH
+conf t
+no ip access-list standard NOPORN ->remove acl if any(standard Practice)
+ip access-list standard NOPORN -> add acl for deny
+deny 66.254.114.0 0.0.0.255
+deny 104.21.0.0 0.0.255.255
+deny host 208.77.20.35
+permit any
+!
+
+kabit ng acl sa gigabit
+remove ng porn
+
+int g1
+ip access-group NOPORN in
+end
+
+balik ng porn
+int g1
+no ip access-group NOPORN in
+end
+
+
+cisco - 72.163.4.185
+NOSCHOOL
+www.dlsu.edu.ph - 172.66.161.211
+www.ccp.edu.ph -  50.6.160.47
+www.feu.edu.ph - 184.168.125.216
+www.ue.edu.ph - 155.137.92.102
+
+
+
+!!!
+How to get IP
+ping link, get ip.
+use ip for acl
+72.163.4.185
+
+
+
+
+
+
+
