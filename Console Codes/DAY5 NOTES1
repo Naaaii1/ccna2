@@ -1,0 +1,71 @@
+
+
+2001:fd80:1e0a::/48
+
+
+sgp - 8192 - 2r13 - /61 - 4s8i
+jpy - 4096 - 2r12 - /60 - 3s1i
+cebu - 16 - 2r4 - /52 - 1s1i
+davao - 8 - 2r3 - /51 - 1s2i
+makati - 512 - 2r9 - /57 - 3s8i
+bgc - 1024 - 2r10 - /58 - 3s4i
+
+0000 
+0000
+0000
+0000
+0000
+
+subnet 2001:fd8:2f1:1031::/64
+		512 sites			64 sites				8sites		2048
+convert		2r9				2r6					2r3		2r11
+add		/73				/70					/67		/75
+finger		3rd8i				2s4i					1s2i		3r2i
+		0000				0000					0000		0000
+		0080				0400					2000		0020
+		0100				0800					4000		0040
+		0180				0c00					6000		0060
+		0200				1000					8000		0080
+		0280				1400					a000		00a0
+
+
+21.80
+
+
+DesignatedPort/DP = fwd port of Root Bridge
+RootPort/RP = fwd port of non-root Bridge(1 only)
+AlternatePort/AP = blk port of nonRootPorts
+BackupPort = yuck yuck, suck urself. enter urself, self-service
+
+
+
+
+
+config t
+hostname coretaasPLDT
+Track 1 Int gi 0/1 line-protocol
+Int vlan 1
+standby 1 ip 10.21.1.6
+standby 1 preempt
+standby 1 Priority 150
+standby 1 Track 1 decrement 60
+
+
+
+
+config t
+hostname corebabaGLOBE
+Int vlan 1
+standby 1 ip 10.21.1.6
+standby 1 preempt
+standby 1 Priority 100
+end
+
+config t
+hostname coretaasPLDT
+Track 1 Int gi 0/1 line-protocol
+Int vlan 1
+standby 1 ip 10.21.1.6
+standby 1 preempt
+standby 1 Priority 150
+standby 1 Track 1 decrement 60
