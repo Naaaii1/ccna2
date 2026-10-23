@@ -1,0 +1,46 @@
+conf t
+ipv6 unicast-routing
+int l0
+ipv6 add 2001:fd8:2f1:1031:0000::/70
+int l1
+ipv6 add 2001:fd8:2f1:1031:0400::/70
+int l2
+ipv6 add 2001:fd8:2f1:1031:0800::/70
+int l4
+ipv6 add 2001:fd8:2f1:1031:0c00::/70
+
+do sh ipv6 int br
+
+conf t
+ipv6 unicast-routing
+int l0
+ipv6 add 2001:fd80:1e0a:0000::fafa/61
+int l1
+ipv6 add 2001:fd80:1e0a:0008::fafa/61
+int l2
+ipv6 add 2001:fd80:1e0a:0010::fafa/61
+int l3
+ipv6 add 2001:fd80:1e0a:0018::fafa/61
+int l4
+ipv6 add 2001:fd80:1e0a:0020::fafa/61
+do sh ipv6 int br
+
+
+
+conf t
+ipv6 unicast-routing
+int l0
+ipv6 add 2001:fd80:1e0a:0000::fafa/75
+int l1
+ipv6 add 2001:fd80:1e0a:0020::fafa/75
+int l2
+ipv6 add 2001:fd80:1e0a:0040::fafa/75
+int l3
+ipv6 add 2001:fd80:1e0a:0060::fafa/75
+int l4
+ipv6 add 2001:fd80:1e0a:0080::fafa/75
+do sh ipv6 int br
+
+
+
+
